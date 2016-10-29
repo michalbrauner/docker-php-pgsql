@@ -17,6 +17,15 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
     && docker-php-ext-install -j$(nproc) gd
 
+# xdebug
+RUN pecl install xdebug \
+    && echo "zend_extension=/usr/local/lib/php/extensions/no-debug-non-zts-20131226/xdebug.so" >> /usr/local/etc/php/php.ini \
+    && echo "xdebug.remote_enable=1" >> /usr/local/etc/php/php.ini \
+    && echo "xdebug.remote_mode=req" >> /usr/local/etc/php/php.ini \
+    && echo "xdebug.remote_port=9000" >> /usr/local/etc/php/php.ini \
+    && echo "xdebug.remote_autostart=1" >> /usr/local/etc/php/php.ini \
+    && echo "xdebug.remote_connect_back=0" >> /usr/local/etc/php/php.ini
+
 # git & unzip (to be able to install packages via composer)
 RUN apt-get update && apt install -y git unzip
 
